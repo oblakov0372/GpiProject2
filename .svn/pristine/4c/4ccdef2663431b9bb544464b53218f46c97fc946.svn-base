@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+
+namespace Draw.src.Helpers
+{
+    public static class ListShapeHelper
+    {
+        public static Rectangle FindEnclosingRectangle(List<Shape> shapes)
+        {
+            //int retreat = (int)rectangles[0].BorderWidth / 2 + 3;
+            List<Rectangle> rectangles = shapes.Select(obj => obj.Contour).ToList();
+            int minX = rectangles.Min(r => (int)r.Location.X);
+            int minY = rectangles.Min(r => (int)r.Location.Y);
+            int maxX = rectangles.Max(r => (int)(r.Location.X + r.Width));
+            int maxY = rectangles.Max(r => (int)(r.Location.Y + r.Height));
+
+            return new Rectangle(minX, minY, maxX - minX, maxY - minY);
+        }
+    }
+}

@@ -1,0 +1,50 @@
+C:\Users\Demian\Desktop\Новая папка (2)\C#\VisualStudio2008-WinForms\bin\Debug\Draw.exe
+C:\Users\Demian\Desktop\Новая папка (2)\C#\VisualStudio2008-WinForms\bin\Debug\Draw.pdb
+C:\Users\Demian\Desktop\Новая папка (2)\C#\VisualStudio2008-WinForms\obj\Debug\Draw.csproj.AssemblyReference.cache
+C:\Users\Demian\Desktop\Новая папка (2)\C#\VisualStudio2008-WinForms\obj\Debug\Draw.DoubleBufferedPanel.resources
+C:\Users\Demian\Desktop\Новая папка (2)\C#\VisualStudio2008-WinForms\obj\Debug\Draw.MainForm.resources
+C:\Users\Demian\Desktop\Новая папка (2)\C#\VisualStudio2008-WinForms\obj\Debug\Draw.csproj.GenerateResource.cache
+C:\Users\Demian\Desktop\Новая папка (2)\C#\VisualStudio2008-WinForms\obj\Debug\Draw.csproj.CoreCompileInputs.cache
+C:\Users\Demian\Desktop\Новая папка (2)\C#\VisualStudio2008-WinForms\obj\Debug\Draw.exe
+C:\Users\Demian\Desktop\Новая папка (2)\C#\VisualStudio2008-WinForms\obj\Debug\Draw.pdb
+C:\Users\Demian\Desktop\Новая папка (2)\C#\VisualStudio2008-WinForms\obj\Debug\Draw.Properties.Resources.resources
+C:\Users\Demian\Desktop\workspace\CGProject\bin\Debug\Draw.exe
+C:\Users\Demian\Desktop\workspace\CGProject\bin\Debug\Draw.pdb
+C:\Users\Demian\Desktop\workspace\CGProject\obj\Debug\Draw.csproj.AssemblyReference.cache
+C:\Users\Demian\Desktop\workspace\CGProject\obj\Debug\Draw.Properties.Resources.resources
+C:\Users\Demian\Desktop\workspace\CGProject\obj\Debug\Draw.DoubleBufferedPanel.resources
+C:\Users\Demian\Desktop\workspace\CGProject\obj\Debug\Draw.MainForm.resources
+C:\Users\Demian\Desktop\workspace\CGProject\obj\Debug\Draw.csproj.GenerateResource.cache
+C:\Users\Demian\Desktop\workspace\CGProject\obj\Debug\Draw.csproj.CoreCompileInputs.cache
+C:\Users\Demian\Desktop\workspace\CGProject\obj\Debug\Draw.exe
+C:\Users\Demian\Desktop\workspace\CGProject\obj\Debug\Draw.pdb
+D:\C#\gpiProject\GPIProject\bin\Debug\Draw.exe
+D:\C#\gpiProject\GPIProject\bin\Debug\Draw.pdb
+D:\C#\gpiProject\GPIProject\obj\Debug\Draw.csproj.AssemblyReference.cache
+D:\C#\gpiProject\GPIProject\obj\Debug\Draw.Properties.Resources.resources
+D:\C#\gpiProject\GPIProject\obj\Debug\Draw.DoubleBufferedPanel.resources
+D:\C#\gpiProject\GPIProject\obj\Debug\Draw.MainForm.resources
+D:\C#\gpiProject\GPIProject\obj\Debug\Draw.csproj.GenerateResource.cache
+D:\C#\gpiProject\GPIProject\obj\Debug\Draw.csproj.CoreCompileInputs.cache
+D:\C#\gpiProject\GPIProject\obj\Debug\Draw.exe
+D:\C#\gpiProject\GPIProject\obj\Debug\Draw.pdb
+D:\workspace\GPIProject\bin\Debug\Draw.exe
+D:\workspace\GPIProject\bin\Debug\Draw.pdb
+D:\workspace\GPIProject\obj\Debug\Draw.csproj.AssemblyReference.cache
+D:\workspace\GPIProject\obj\Debug\Draw.Properties.Resources.resources
+D:\workspace\GPIProject\obj\Debug\Draw.DoubleBufferedPanel.resources
+D:\workspace\GPIProject\obj\Debug\Draw.MainForm.resources
+D:\workspace\GPIProject\obj\Debug\Draw.csproj.GenerateResource.cache
+D:\workspace\GPIProject\obj\Debug\Draw.csproj.CoreCompileInputs.cache
+D:\workspace\GPIProject\obj\Debug\Draw.exe
+D:\workspace\GPIProject\obj\Debug\Draw.pdb
+D:\workspace\Новая папка\bin\Debug\Draw.exe
+D:\workspace\Новая папка\bin\Debug\Draw.pdb
+D:\workspace\Новая папка\obj\Debug\Draw.csproj.AssemblyReference.cache
+D:\workspace\Новая папка\obj\Debug\Draw.Properties.Resources.resources
+D:\workspace\Новая папка\obj\Debug\Draw.DoubleBufferedPanel.resources
+D:\workspace\Новая папка\obj\Debug\Draw.MainForm.resources
+D:\workspace\Новая папка\obj\Debug\Draw.csproj.GenerateResource.cache
+D:\workspace\Новая папка\obj\Debug\Draw.csproj.CoreCompileInputs.cache
+D:\workspace\Новая папка\obj\Debug\Draw.exe
+D:\workspace\Новая папка\obj\Debug\Draw.pdb

@@ -1,0 +1,66 @@
+﻿using System;
+using System.Drawing;
+
+namespace Draw
+{
+    /// <summary>
+    /// Класът правоъгълник е основен примитив, който е наследник на базовия Shape.
+    /// </summary>
+    public class ElipseShape : Shape
+    {
+        #region Constructor
+
+        public ElipseShape(RectangleF elipse) : base(elipse)
+        {
+        }
+
+        public ElipseShape(ElipseShape elipse) : base(elipse)
+        {
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Проверка за принадлежност на точка point към правоъгълника.
+        /// В случая на правоъгълник този метод може да не бъде пренаписван, защото
+        /// Реализацията съвпада с тази на абстрактния клас Shape, който проверява
+        /// дали точката е в обхващащия правоъгълник на елемента (а той съвпада с
+        /// елемента в този случай).
+        /// </summary>
+        public override bool Contains(PointF point)
+        {
+            PointF[] transformedPoint = new PointF[1] { point };
+            Matrix.Invert();
+            Matrix.TransformPoints(transformedPoint);
+            Matrix.Invert();
+            double x = transformedPoint[0].X;
+            double y = transformedPoint[0].Y;
+            double xCenter = Location.X + (Width / 2);
+            double yCenter = Location.Y + (Height / 2);
+            double a = Width / 2 + BorderWidth / 2;
+            double b = Height / 2 + BorderWidth / 2;
+
+            double result = Math.Pow(x - xCenter, 2) / Math.Pow(a, 2) +
+                            Math.Pow(y - yCenter, 2) / Math.Pow(b, 2);
+            return result <= 1;
+        }
+
+        /// <summary>
+        /// Частта, визуализираща конкретния примитив.
+        /// </summary>
+        public override void DrawSelf(Graphics grfx)
+        {
+            base.DrawSelf(grfx);
+            var store = grfx.Save(); ;
+
+            grfx.Transform = Matrix;
+
+            grfx.FillEllipse(new SolidBrush(FillColor), Rectangle.X, Rectangle.Y,
+                                                        Rectangle.Width, Rectangle.Height);
+            grfx.DrawEllipse(new Pen(BorderColor, BorderWidth), Rectangle.X, Rectangle.Y,
+                                                               Rectangle.Width, Rectangle.Height);
+            grfx.Restore(store);
+
+        }
+    }
+}

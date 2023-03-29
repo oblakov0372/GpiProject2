@@ -1,0 +1,84 @@
+﻿using Draw.src.Helpers;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using static System.Windows.Forms.AxHost;
+
+namespace Draw
+{
+    /// <summary>
+    /// Класът правоъгълник е основен примитив, който е наследник на базовия Shape.
+    /// </summary>
+    public class StarShape : Shape
+    {
+        public PointF[] Points { get; set; }
+        #region Constructor
+
+        public StarShape(RectangleF star) : base(star)
+        {
+            Points = new PointF[10];
+        }
+
+        public StarShape(StarShape star) : base(star)
+        {
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Проверка за принадлежност на точка point към правоъгълника.
+        /// В случая на правоъгълник този метод може да не бъде пренаписван, защото
+        /// Реализацията съвпада с тази на абстрактния клас Shape, който проверява
+        /// дали точката е в обхващащия правоъгълник на елемента (а той съвпада с
+        /// елемента в този случай).
+        /// </summary>
+        public override bool Contains(PointF point)
+        {
+            PointF[] transformedPoint = new PointF[1] { point };
+            Matrix.Invert();
+            Matrix.TransformPoints(transformedPoint);
+            Matrix.Invert();
+            return Polygon.IsPointInPolygon(Points, transformedPoint[0]);
+        }
+
+
+        /// <summary>
+        /// Частта, визуализираща конкретния примитив.
+        /// </summary>
+        public override void DrawSelf(Graphics grfx)
+        {
+            base.DrawSelf(grfx);
+
+            grfx.Transform = Matrix;
+
+            Points[0] = new PointF(Rectangle.X + 0, Rectangle.Y + 80);
+            Points[1] = new PointF(Rectangle.X + 18, Rectangle.Y + 26);
+            Points[2] = new PointF(Rectangle.X + 80, Rectangle.Y + 26);
+            Points[3] = new PointF(Rectangle.X + 30, Rectangle.Y + -10);
+            Points[4] = new PointF(Rectangle.X + 50, Rectangle.Y + -68);
+            Points[5] = new PointF(Rectangle.X + 0, Rectangle.Y + -32);
+            Points[6] = new PointF(Rectangle.X + -50, Rectangle.Y + -68);
+            Points[7] = new PointF(Rectangle.X + -30, Rectangle.Y + -10);
+            Points[8] = new PointF(Rectangle.X + -80, Rectangle.Y + 26);
+            Points[9] = new PointF(Rectangle.X + -18, Rectangle.Y + 26);
+            
+            grfx.FillPolygon(new SolidBrush(FillColor), Points);
+            grfx.DrawPolygon(new Pen(BorderColor, BorderWidth), Points);
+
+            grfx.ResetTransform();
+
+        }
+
+        public override void SetContour(Graphics grfx)
+        {
+            float retreat = BorderWidth * 1.5f;
+
+            var data = Polygon.DataForRectangleContour(this.Points);
+            Contour =  new Rectangle((int)(data[0] - retreat),
+                                    (int)(data[1] - retreat),
+                                    (int)(data[2] + retreat * 2),
+                                    (int)(data[3] + retreat * 2));
+        }
+    }
+}

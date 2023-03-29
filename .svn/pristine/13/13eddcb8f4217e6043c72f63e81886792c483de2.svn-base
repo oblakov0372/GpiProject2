@@ -1,0 +1,270 @@
+﻿using Draw.src.Helpers;
+using Draw.src.Model;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Runtime.Remoting.Messaging;
+using System.Windows.Forms;
+
+namespace Draw
+{
+    /// <summary>
+    /// Класът, който ще бъде използван при управляване на диалога.
+    /// </summary>
+    public class DialogProcessor : DisplayProcessor
+    {
+        #region Constructor
+
+        public DialogProcessor()
+        {
+        }
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Избран елемент.
+        /// </summary>
+        private List<Shape> selectionsList = new List<Shape>();
+        public List<Shape> SelectionsList
+        {
+            get { return selectionsList; }
+            set { selectionsList = value; }
+        }
+
+        /// <summary>
+        /// Дали в момента диалога е в състояние на "влачене" на избрания елемент.
+        /// </summary>
+        private bool isDragging;
+        public bool IsDragging
+        {
+            get { return isDragging; }
+            set { isDragging = value; }
+        }
+
+        /// <summary>
+        /// Последна позиция на мишката при "влачене".
+        /// Използва се за определяне на вектора на транслация.
+        /// </summary>
+        private PointF lastLocation;
+        public PointF LastLocation
+        {
+            get { return lastLocation; }
+            set { lastLocation = value; }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Добавя примитив - правоъгълник на произволно място върху клиентската област.
+        /// </summary>
+        public void AddRandomRectangle()
+        {
+            Random rnd = new Random();
+            int x = rnd.Next(100, 1000);
+            int y = rnd.Next(100, 600);
+
+            RectangleShape rect = new RectangleShape(new Rectangle(x, y, 100, 200));
+
+            ShapeList.Add(rect);
+        }
+
+        public void AddRandomElipse()
+        {
+            Random rnd = new Random();
+            int x = rnd.Next(100, 1000);
+            int y = rnd.Next(100, 600);
+
+
+            ElipseShape elipse = new ElipseShape(new Rectangle(x, y, 200, 150));
+
+            ShapeList.Add(elipse);
+        }
+
+        public void AddRandomStar()
+        {
+            Random rnd = new Random();
+            int x = rnd.Next(100, 1000);
+            int y = rnd.Next(100, 600);
+
+            StarShape star = new StarShape(new Rectangle(x, y, 200, 200));
+
+
+            ShapeList.Add(star);
+        }
+        /// <summary>
+        /// Проверява дали дадена точка е в елемента.
+        /// Обхожда в ред обратен на визуализацията с цел намиране на
+        /// "най-горния" елемент т.е. този който виждаме под мишката.
+        /// </summary>
+        /// <param name="point">Указана точка</param>
+        /// <returns>Елемента на изображението, на който принадлежи дадената точка.</returns>
+        public Shape ContainsPoint(PointF point)
+        {
+            for (int i = ShapeList.Count - 1; i >= 0; i--)
+            {
+                if (ShapeList[i].Contains(point))
+                {
+                    //ShapeList[i].FillColor = Color.Red;
+
+                    return ShapeList[i];
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Транслация на избраният елемент на вектор определен от <paramref name="p>p</paramref>
+        /// </summary>
+        /// <param name="p">Вектор на транслация.</param>
+        public void TranslateTo(PointF p)
+        {
+            
+            foreach (var selection in selectionsList)
+            {
+                PointF[] array = new PointF[2] { p, lastLocation };
+                Matrix matrix = selection.Matrix;
+                matrix.Invert();
+                matrix.TransformPoints(array);
+                matrix.Invert();
+                selection.Location = new PointF(selection.Location.X + array[0].X - array[1].X, selection.Location.Y + array[0].Y - array[1].Y);
+
+            }
+
+
+            lastLocation = p;
+        }
+
+        public void SetBorderColor(Color color)
+        {
+            foreach (var selection in selectionsList)
+            {
+                selection.BorderColor = color;
+            }
+        }
+        public void SetFillColor(Color color)
+        {
+            foreach (var selection in selectionsList)
+            {
+                selection.FillColor = color;
+            }
+        }
+
+        public void SetBorderWidth(int width)
+        {
+            foreach (var selection in selectionsList)
+            {
+                selection.BorderWidth = width;
+            }
+        }
+
+        public void SetTransparency(int transparency)
+        {
+            foreach (var selection in selectionsList)
+            {
+                selection.Transparency = transparency;
+            }
+        }
+
+        public void Rotate(float angle)
+        {
+            foreach (var selection in selectionsList)
+            {
+                Matrix m = new Matrix(selection.Matrix.Elements[0],
+                                       selection.Matrix.Elements[1],
+                                       selection.Matrix.Elements[2],
+                                       selection.Matrix.Elements[3],
+                                       selection.Matrix.Elements[4],
+                                       selection.Matrix.Elements[5]);
+
+                PointF pointF = new PointF(selection.Contour.X + (selection.Contour.Width / 2), selection.Contour.Location.Y + (selection.Contour.Height / 2));
+                m.RotateAt(angle, pointF);
+                selection.Matrix = m;
+            }
+        }
+
+        public void ChangeScale(float value)
+        {
+            foreach (var selection in selectionsList)
+            {
+                Matrix m = new Matrix(selection.Matrix.Elements[0],
+                                       selection.Matrix.Elements[1],
+                                       selection.Matrix.Elements[2],
+                                       selection.Matrix.Elements[3],
+                                       selection.Matrix.Elements[4],
+                                       selection.Matrix.Elements[5]);
+
+                m.Scale(value, value);
+                selection.Matrix = m;
+            }
+        }
+        public void RemoveShape()
+        {
+            foreach (var selection in selectionsList)
+            {
+                ShapeList.Remove(selection);
+            }
+            selectionsList.Clear();
+
+        }
+
+        public void GroupElements()
+        {
+            if (SelectionsList.Count > 1)
+            {
+                GroupShape group = new GroupShape(ListShapeHelper.FindEnclosingRectangle(selectionsList));
+                foreach (var item in SelectionsList)
+                {
+                    group.Shapes.Add(item);
+                    ShapeList.Remove(item);
+                }
+                SelectionsList.Clear();
+                SelectionsList.Add(group);
+                ShapeList.Add(group);
+            }
+        }
+
+        public void UnGroupElements()
+        {
+            if (selectionsList.Count == 1 && selectionsList[0].GetType() == typeof(GroupShape))
+            {
+                foreach (var shape in ((GroupShape)selectionsList[0]).Shapes)
+                {
+                    ShapeList.Add(shape);
+                    SelectionsList.Add(shape);
+                }
+                ShapeList.Remove(selectionsList[0]);
+                SelectionsList.RemoveAt(0);
+            }
+        }
+
+        public override void Draw(Graphics grfx)
+        {
+            base.Draw(grfx);
+            float[] dashValues = { 5, 5, 5, 5 };
+            Pen blackPen = new Pen(Color.Black, 2) { DashPattern = dashValues };
+
+            if (selectionsList.Count == 1)
+            {
+                selectionsList[0].SetContour(grfx);
+                grfx.DrawRectangle(blackPen, selectionsList[0].Contour);
+            }
+            else if (selectionsList.Count > 1)
+            {
+                foreach (var selection in selectionsList)
+                {
+                    //contour rectangle for all items ,to draw an enclosing rectangle
+                    selection.SetContour(grfx);
+                }
+                //Contour enclosing all items 
+                Rectangle contour = ListShapeHelper.FindEnclosingRectangle(SelectionsList);
+
+                grfx.DrawRectangle(blackPen, contour);
+            }
+        }
+    }
+}
