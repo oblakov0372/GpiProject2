@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Runtime.Serialization;
 
 namespace Draw
 {
@@ -8,20 +7,15 @@ namespace Draw
     /// Класът правоъгълник е основен примитив, който е наследник на базовия Shape.
     /// </summary>
     [Serializable]
-    public class ElipseShape : Shape
+    public class RectangleShape : Shape
     {
         #region Constructor
-        public ElipseShape()
-        {
-        }
-        public ElipseShape(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
-        public ElipseShape(RectangleF elipse) : base(elipse)
+
+        public RectangleShape(RectangleF rect) : base(rect)
         {
         }
 
-        public ElipseShape(ElipseShape elipse) : base(elipse)
+        public RectangleShape(RectangleShape rectangle) : base(rectangle)
         {
         }
 
@@ -36,20 +30,17 @@ namespace Draw
         /// </summary>
         public override bool Contains(PointF point)
         {
-            PointF[] transformedPoint = new PointF[1] { point };
+            PointF[] array = new PointF[1] { point };
             Matrix.Invert();
-            Matrix.TransformPoints(transformedPoint);
+            Matrix.TransformPoints(array);
             Matrix.Invert();
-            double x = transformedPoint[0].X;
-            double y = transformedPoint[0].Y;
-            double xCenter = Location.X + (Width / 2);
-            double yCenter = Location.Y + (Height / 2);
-            double a = Width / 2 + BorderWidth / 2;
-            double b = Height / 2 + BorderWidth / 2;
-
-            double result = Math.Pow(x - xCenter, 2) / Math.Pow(a, 2) +
-                            Math.Pow(y - yCenter, 2) / Math.Pow(b, 2);
-            return result <= 1;
+            if (base.Contains(array[0]))
+                // Проверка дали е в обекта само, ако точката е в обхващащия правоъгълник.
+                // В случая на правоъгълник - директно връщаме true
+                return true;
+            else
+                // Ако не е в обхващащия правоъгълник, то неможе да е в обекта и => false
+                return false;
         }
 
         /// <summary>
@@ -59,15 +50,13 @@ namespace Draw
         {
             base.DrawSelf(grfx);
             var store = grfx.Save(); ;
-
+            
             grfx.Transform = Matrix;
 
-            grfx.FillEllipse(new SolidBrush(FillColor), Rectangle.X, Rectangle.Y,
-                                                        Rectangle.Width, Rectangle.Height);
-            grfx.DrawEllipse(new Pen(BorderColor, BorderWidth), Rectangle.X, Rectangle.Y,
-                                                               Rectangle.Width, Rectangle.Height);
+            grfx.FillRectangle(new SolidBrush(FillColor), Rectangle.X, Rectangle.Y, Rectangle.Width, Rectangle.Height);
+            grfx.DrawRectangle(new Pen(BorderColor, BorderWidth), Rectangle.X, Rectangle.Y, Rectangle.Width, Rectangle.Height);
+           
             grfx.Restore(store);
-
         }
     }
 }

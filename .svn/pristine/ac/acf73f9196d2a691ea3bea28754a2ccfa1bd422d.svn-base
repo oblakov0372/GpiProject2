@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Runtime.Serialization;
-using System.Xml.Serialization;
 
 namespace Draw
 {
@@ -10,10 +8,13 @@ namespace Draw
     /// Базовия клас на примитивите, който съдържа общите характеристики на примитивите.
     /// </summary>
     [Serializable]
-    public abstract class Shape : ISerializable
+    public abstract class Shape
     {
         #region Constructors
-        public Shape(){}
+
+        public Shape()
+        {
+        }
 
         public Shape(RectangleF rect)
         {
@@ -33,23 +34,6 @@ namespace Draw
             this.Transparency = shape.Transparency;
             this.matrix = shape.matrix;
             this.contour = shape.contour;
-        }
-        protected Shape(SerializationInfo info, StreamingContext context)
-        {
-            // Десериализуем поля, которые не требуют дополнительной обработки
-            Rectangle = (RectangleF)info.GetValue("Rectangle", typeof(RectangleF));
-            Width = info.GetSingle("Width");
-            Height = info.GetSingle("Height");
-            Location = (PointF)info.GetValue("Location", typeof(PointF));
-            FillColor = (Color)info.GetValue("FillColor", typeof(Color));
-            BorderColor = (Color)info.GetValue("BorderColor", typeof(Color));
-            BorderWidth = info.GetSingle("BorderWidth");
-            Transparency = info.GetSingle("Transparency");
-            Contour = (Rectangle)info.GetValue("Contour", typeof(Rectangle));
-
-            // Десериализуем матрицу трансформации из массива значений
-            float[] matrixValues = (float[])info.GetValue("Matrix", typeof(float[]));
-            Matrix = new Matrix(matrixValues[0], matrixValues[1], matrixValues[2], matrixValues[3], matrixValues[4], matrixValues[5]);
         }
         #endregion
 
@@ -139,6 +123,7 @@ namespace Draw
             set { matrix = value; }
         }
 
+
         private Rectangle contour = new Rectangle();
         public virtual Rectangle Contour
         {
@@ -147,24 +132,6 @@ namespace Draw
         }
 
         #endregion
-
-        public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue("Rectangle", Rectangle);
-            info.AddValue("Width", Width);
-            info.AddValue("Height", Height);
-            info.AddValue("Location", Location);
-            info.AddValue("FillColor", FillColor);
-            info.AddValue("BorderColor", BorderColor);
-            info.AddValue("BorderWidth", BorderWidth);
-            info.AddValue("Transparency", Transparency);
-            info.AddValue("Contour", Contour);
-
-            // Сериализуем матрицу трансформации в виде массива значений
-            float[] matrixValues = Matrix.Elements;
-            info.AddValue("Matrix", matrixValues, typeof(float[]));
-        }
-        
 
 
         /// <summary>
@@ -195,7 +162,6 @@ namespace Draw
         }
 
 
-
         public virtual void SetContour(Graphics grfx)
         {
             float retreat = BorderWidth / 2 + 3;
@@ -212,7 +178,5 @@ namespace Draw
 
             grfx.Restore(store);
         }
-
-
     }
 }

@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.Serialization;
 using static System.Windows.Forms.AxHost;
 
 namespace Draw
@@ -17,13 +16,6 @@ namespace Draw
         public PointF[] Points { get; set; }
         #region Constructor
 
-        public StarShape()
-        {
-        }
-        public StarShape(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-            Points = (PointF[])info.GetValue("Points", typeof(PointF[]));
-        }
         public StarShape(RectangleF star) : base(star)
         {
             Points = new PointF[10];
@@ -43,12 +35,6 @@ namespace Draw
         /// дали точката е в обхващащия правоъгълник на елемента (а той съвпада с
         /// елемента в този случай).
         /// </summary>
-
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
-            info.AddValue("Points", Points);
-        }
         public override bool Contains(PointF point)
         {
             PointF[] transformedPoint = new PointF[1] { point };

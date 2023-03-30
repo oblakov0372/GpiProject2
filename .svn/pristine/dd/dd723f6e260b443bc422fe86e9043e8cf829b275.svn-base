@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Reflection;
-using System.Runtime.Serialization;
 using System.Threading;
 
 namespace Draw.src.Model
@@ -12,47 +10,12 @@ namespace Draw.src.Model
     [Serializable]
     public class GroupShape : Shape
     {
-
-        public GroupShape()
-        {
-        }
-        public GroupShape(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-            Shapes = (List<Shape>)info.GetValue("Shapes", typeof(List<Shape>));
-        }
-
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
-            info.AddValue("Shapes", Shapes);
-        }
-
         public GroupShape(RectangleF groupShape) : base(groupShape)
         {
         }
         public GroupShape(GroupShape groupShape) : base(groupShape)
         {
-            foreach (var item in groupShape.Shapes)
-            {
-                if (item.GetType() == typeof(RectangleShape))
-                {
-                    RectangleShape shp = new RectangleShape((RectangleShape)item);
-                    Shapes.Add(shp);
-                }
-                else if (item.GetType() == typeof(ElipseShape))
-                {
-                    ElipseShape shp = new ElipseShape((ElipseShape)item);
-                    Shapes.Add(shp);
-                }else if (item.GetType() == typeof(StarShape))
-                {
-                    StarShape shp = new StarShape((StarShape)item);
-                    Shapes.Add(shp);
-                }else if(item.GetType() == typeof(GroupShape))
-                {
-                    GroupShape shp = new GroupShape((GroupShape)item);
-                    Shapes.Add(shp);
-                }
-            }
+            this.shapes = groupShape.shapes;
         }
         #region Properties
 
