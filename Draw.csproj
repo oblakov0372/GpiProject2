@@ -125,7 +125,5 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src\Serializables\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

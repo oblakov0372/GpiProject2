@@ -1,6 +1,8 @@
 ﻿using Draw.src.Model;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
+using System.Drawing;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
@@ -346,21 +348,42 @@ namespace Draw
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Файлове на модела на изображението (*.xcf)||Всички файлове (*.*)|*.*";
-            saveFileDialog.Title = "Запазване на модела на изображението";
+            saveFileDialog.Filter = "Файлове на модела  (*.xcf)|*.xcf|Файлове на изображението(*.png)|*.png";
+            saveFileDialog.Title = "Запазване";
             saveFileDialog.CheckPathExists = true;
 
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
                 string fileName = saveFileDialog.FileName;
-                FileStream fileStream = new FileStream(fileName, FileMode.Create);
 
-                BinaryFormatter formatter = new BinaryFormatter();
-                foreach (Shape shape in dialogProcessor.ShapeList)
+                if (fileName.Contains(".xcf"))
                 {
-                    formatter.Serialize(fileStream, shape);
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    using (FileStream fileStream = new FileStream(fileName, FileMode.Create))
+                    {
+                        foreach (Shape shape in dialogProcessor.ShapeList)
+                        {
+                            formatter.Serialize(fileStream, shape);
+                        }
+                    }
                 }
+                else if (fileName.Contains(".png"))
+                {
+                    using (Bitmap bitmap = new Bitmap(viewPort.Width, viewPort.Height))
+                    {
+                        using (Graphics graphics = Graphics.FromImage(bitmap))
+                        {
+                            graphics.Clear(viewPort.BackColor);
 
+                            foreach (Shape shape in dialogProcessor.ShapeList)
+                            {
+                                shape.DrawSelf(graphics);
+                            }
+                        }
+
+                        bitmap.Save(fileName, ImageFormat.Png);
+                    }
+                }
             }
         }
 
@@ -370,15 +393,17 @@ namespace Draw
             openFileDialog.ShowDialog();
 
             var fileName = openFileDialog.FileName;
-
-            FileStream fileStream = new FileStream(fileName, FileMode.Open);
-            dialogProcessor.ShapeList.Clear();
-
-            BinaryFormatter formatter = new BinaryFormatter();
-            while (fileStream.Position < fileStream.Length)
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                var shape = formatter.Deserialize(fileStream);
-                dialogProcessor.ShapeList.Add((Shape)shape);
+                FileStream fileStream = new FileStream(fileName, FileMode.Open);
+                dialogProcessor.ShapeList.Clear();
+
+                BinaryFormatter formatter = new BinaryFormatter();
+                while (fileStream.Position < fileStream.Length)
+                {
+                    var shape = formatter.Deserialize(fileStream);
+                    dialogProcessor.ShapeList.Add((Shape)shape);
+                }
             }
         }
     }
