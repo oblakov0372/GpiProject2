@@ -38,6 +38,7 @@ namespace Draw
             set { selectionsList = value; }
         }
 
+        public bool ShowName { get; set; } = true;
         /// <summary>
         /// Дали в момента диалога е в състояние на "влачене" на избрания елемент.
         /// </summary>
@@ -258,7 +259,21 @@ namespace Draw
                     grfx.DrawRectangle(blackPen, item.Contour);
                     grfx.Restore(state);
                 }
-                
+            }
+
+            if(ShowName == true)
+            {
+                foreach (Shape item in ShapeList)
+                {
+                    float centerX = item.Contour.X + item.Contour.Width / 2f;
+                    float centerY = item.Contour.Y + item.Contour.Height / 2f;
+
+                    var font = new Font("Arial", 12);
+                    var brush = new SolidBrush(Color.Black);
+                    var name = item.Name;
+                    var nameSize = grfx.MeasureString(name, font);
+                    grfx.DrawString(name, font, brush, centerX - nameSize.Width / 2f, centerY - nameSize.Height / 2f);
+                }
             }
             
         }

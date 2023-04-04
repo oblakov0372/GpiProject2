@@ -12,12 +12,17 @@ namespace Draw
     [Serializable]
     public abstract class Shape : ISerializable
     {
+        public static int Count { get; set; } = 0;
         #region Constructors
-        public Shape(){}
+        public Shape(){
+            Count += 1;
+        }
 
         public Shape(RectangleF rect)
         {
             rectangle = rect;
+            Count += 1;
+            Name = $"Shape{Count}";
         }
 
         public Shape(Shape shape)
@@ -33,6 +38,9 @@ namespace Draw
             this.Transparency = shape.Transparency;
             this.matrix = shape.matrix;
             this.contour = shape.contour;
+            Count += 1;
+
+            Name = $"Shape{Count}";
         }
         protected Shape(SerializationInfo info, StreamingContext context)
         {
@@ -54,6 +62,7 @@ namespace Draw
         #endregion
 
         #region Properties
+        public string Name { get; set; }
 
         /// <summary>
         /// Обхващащ правоъгълник на елемента.

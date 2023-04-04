@@ -50,7 +50,18 @@ namespace Draw
             dialogProcessor.ReDraw(sender, e);
         }
 
+        /// <summary>
+        /// Бутон, който поставя на произволно място правоъгълник със зададените размери.
+        /// Променя се лентата със състоянието и се инвалидира контрола, в който визуализираме.
+        /// </summary>
+        void DrawRectangleSpeedButtonClick(object sender, EventArgs e)
+        {
+            dialogProcessor.AddRandomRectangle();
 
+            statusBar.Items[0].Text = "Последно действие: Рисуване на правоъгълник";
+
+            viewPort.Invalidate();
+        }
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
@@ -72,25 +83,21 @@ namespace Draw
                     if (shape.GetType() == typeof(RectangleShape))
                     {
                         RectangleShape rect = new RectangleShape((RectangleShape)shape);
-                        rect.Location = new PointF(rect.Location.X + 20, rect.Location.Y + 20);
                         dialogProcessor.ShapeList.Add(rect);
                     }
                     else if (shape.GetType() == typeof(ElipseShape))
                     {
                         ElipseShape elipse = new ElipseShape((ElipseShape)shape);
-                        elipse.Location = new PointF(elipse.Location.X + 20, elipse.Location.Y + 20);
                         dialogProcessor.ShapeList.Add(elipse);
                     }
                     else if (shape.GetType() == typeof(StarShape))
                     {
                         StarShape star = new StarShape((StarShape)shape);
-                        star.Location = new PointF(star.Location.X + 20, star.Location.Y + 20);
                         dialogProcessor.ShapeList.Add(star);
                     }
                     else if (shape.GetType() == typeof(GroupShape))
                     {
                         GroupShape group = new GroupShape((GroupShape)shape);
-                        group.Location = new PointF(group.Location.X + 20, group.Location.Y + 20);
                         dialogProcessor.ShapeList.Add(group);
                     }
                 }
@@ -189,18 +196,6 @@ namespace Draw
         }
 
         /// <summary>
-        /// /// Рисуване на Rectangle.
-        /// </summary>
-        void DrawRectangleSpeedButtonClick(object sender, EventArgs e)
-        {
-            dialogProcessor.AddRandomRectangle();
-
-            statusBar.Items[0].Text = "Последно действие: Рисуване на правоъгълник";
-
-            viewPort.Invalidate();
-        }
-
-        /// <summary>
         /// Рисуване на Еллипс.
         /// </summary>
         private void drawEllipse_Click(object sender, EventArgs e)
@@ -294,8 +289,6 @@ namespace Draw
             dialogProcessor.GroupElements();
             groupElement.Enabled = false;
             ungroupElements.Enabled = true;
-
-
             viewPort.Invalidate();
         }
         private void ungroupElements_Click(object sender, EventArgs e)
@@ -373,7 +366,6 @@ namespace Draw
                             formatter.Serialize(fileStream, shape);
                         }
                     }
-
                 }
                 else if (fileName.Contains(".png"))
                 {
@@ -412,20 +404,6 @@ namespace Draw
                     var shape = formatter.Deserialize(fileStream);
                     dialogProcessor.ShapeList.Add((Shape)shape);
                 }
-            }
-        }
-
-        private void showNamesButton_Click(object sender, EventArgs e)
-        {
-            if(dialogProcessor.ShowName == false)
-            {
-                dialogProcessor.ShowName = true;
-                showNamesButton.Image = Image.FromFile("D:\\workspace\\Новая папка\\images\\show.png");
-            }
-            else
-            {
-                dialogProcessor.ShowName = false;
-                showNamesButton.Image = Image.FromFile("D:\\workspace\\Новая папка\\images\\hide.png");
             }
         }
     }
