@@ -8,7 +8,6 @@ using System.IO.Pipes;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Draw
 {
@@ -22,7 +21,6 @@ namespace Draw
         /// Агрегирания диалогов процесор във формата улеснява манипулацията на модела.
         /// </summary>
         private DialogProcessor dialogProcessor = new DialogProcessor();
-        private BindingSource shapeBindingSource = new BindingSource();
 
         public MainForm()
         {
@@ -30,9 +28,7 @@ namespace Draw
             // The InitializeComponent() call is required for Windows Forms designer support.
             //
             InitializeComponent();
-            shapeBindingSource.DataSource = dialogProcessor.ShapeList;
-            comboBoxShapes.DataSource = shapeBindingSource;
-            comboBoxShapes.DisplayMember = "Name";
+
             //
             // TODO: Add constructor code after the InitializeComponent() call.
             //
@@ -201,7 +197,7 @@ namespace Draw
         void DrawRectangleSpeedButtonClick(object sender, EventArgs e)
         {
             dialogProcessor.AddRandomRectangle();
-            shapeBindingSource.ResetBindings(false);
+
             statusBar.Items[0].Text = "Последно действие: Рисуване на правоъгълник";
 
             viewPort.Invalidate();
@@ -213,7 +209,6 @@ namespace Draw
         private void drawEllipse_Click(object sender, EventArgs e)
         {
             dialogProcessor.AddRandomElipse();
-            shapeBindingSource.ResetBindings(false);
             statusBar.Items[0].Text = "Последно действие: Рисуване на елипс";
             viewPort.Invalidate();
         }
@@ -224,7 +219,6 @@ namespace Draw
         private void drawStar_Click(object sender, EventArgs e)
         {
             dialogProcessor.AddRandomStar();
-            shapeBindingSource.ResetBindings(false);
             statusBar.Items[0].Text = "Последно действие: Рисуване на звезда";
             viewPort.Invalidate();
         }
@@ -301,7 +295,6 @@ namespace Draw
         private void groupElement_Click(object sender, EventArgs e)
         {
             dialogProcessor.GroupElements();
-            shapeBindingSource.ResetBindings(false);
             groupElement.Enabled = false;
             ungroupElements.Enabled = true;
 
@@ -311,7 +304,6 @@ namespace Draw
         private void ungroupElements_Click(object sender, EventArgs e)
         {
             dialogProcessor.UnGroupElements();
-            shapeBindingSource.ResetBindings(false);
             ungroupElements.Enabled = false;
             groupElement.Enabled = true;
             viewPort.Invalidate();
@@ -370,7 +362,6 @@ namespace Draw
             if(dialogProcessor.SelectionsList.Count != 0)
             {
                 dialogProcessor.ChangeName(shapeName.Text);
-                shapeBindingSource.ResetBindings(false);
                 viewPort.Invalidate();
             }
         }
@@ -475,11 +466,6 @@ namespace Draw
             viewPort.Invalidate();
         }
 
-        private void comboBoxShapes_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            dialogProcessor.SelectionsList.Clear();
-            dialogProcessor.SelectionsList.Add((Shape)comboBoxShapes.SelectedItem);
-            viewPort.Invalidate();
-        }
+        
     }
 }
